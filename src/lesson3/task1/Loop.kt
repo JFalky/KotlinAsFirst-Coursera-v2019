@@ -71,7 +71,7 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  */
 fun digitNumber(n: Int): Int {
     var count = 1
-    var number = n
+    var number = abs(n)
     if (number < 10) return count
     else do {
         count++
@@ -86,12 +86,27 @@ return count
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int =
-    when {
+fun fib(n: Int): Int {
+    var a = 1
+    var b = 1
+    var c = 0
+    if (n == 1) return 1
+    else if (n == 2) return 1
+    else {
+        for (i in 3..n) {
+            c = a + b
+            a = b
+            b = c
+        }
+    }
+    return c
+}
+
+    /* when {
         n == 1 -> 1
         n == 2 -> 1
         else -> fib(n - 2) + fib(n - 1)
-    }
+    } */
 
 
 
@@ -106,7 +121,7 @@ fun lcm(m: Int, n: Int): Int {
     var i = max(m, n)
     while (k != i) {
         if (i % m == 0) {
-                if (i % n == 0) k = i else i++
+            if (i % n == 0) k = i else i++
         }
         else i++
     }
@@ -207,7 +222,7 @@ fun collatzSteps(x: Int): Int {
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
 fun sin(x: Double, eps: Double): Double {
-    if (x % PI < 1.0E-10) return 0.0
+    if (abs(x % PI) < 1.0E-10) return 0.0
     var k: Double
     var s = 0.0
     var i = 0
@@ -215,7 +230,6 @@ fun sin(x: Double, eps: Double): Double {
         k = (-1.0).pow(i) * x.pow(2 * i +1) / factorial(2 * i + 1)
         s += k
         i++
-
     } while (abs(k) > eps)
     return s
 }
@@ -230,8 +244,8 @@ fun sin(x: Double, eps: Double): Double {
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
 fun cos(x: Double, eps: Double): Double {
-    if (x % (2 * PI) < 1.0E-10) return 1.0
-    if ((x % PI < 1.0E-10) && (x % (2 * PI) > 1.0E-10)) return -1.0
+    if (abs(x % (2 * PI)) < 1.0E-10) return 1.0
+    if ((abs(x % PI) < 1.0E-10) && (abs(x % (2 * PI)) > 1.0E-10)) return -1.0
     var k: Double
     var s = 0.0
     var i = 0
@@ -338,16 +352,18 @@ fun hasDifferentDigits(n: Int): Boolean {
 fun squareSequenceDigit(n: Int): Int {
     var i = 0
     var l = 0
-    var x:Int
+    var x = 0
+    var s:Int
     while (l < n) {
         i++
         x = sqr(i)
+        s = x
         do {
-            x /= 10
+            s /= 10
             l++
-        } while (x > 0)
+        } while (s > 0)
     }
-    return sqr(i) / (10.0.pow(l - n)).toInt() % 10
+    return x / (10.0.pow(l - n)).toInt() % 10
 }
 
 
@@ -363,14 +379,16 @@ fun squareSequenceDigit(n: Int): Int {
 fun fibSequenceDigit(n: Int): Int {
     var i = 0
     var l = 0
-    var x:Int
+    var x = 0
+    var s:Int
     while (l < n) {
         i++
         x = fib(i)
+        s = x
         do {
-            x /= 10
+            s /= 10
             l++
-        } while (x > 0)
+        } while (s > 0)
     }
-    return fib(i) / (10.0.pow(l - n)).toInt() % 10
+    return x / (10.0.pow(l - n)).toInt() % 10
 }
