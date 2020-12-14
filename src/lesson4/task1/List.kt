@@ -3,7 +3,10 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
+import lesson1.task1.sqr
 import kotlin.math.sqrt
+import kotlin.math.pow
+
 
 /**
  * Пример
@@ -115,14 +118,23 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double = TODO()
+fun abs(v: List<Double>): Double {
+    var str = mutableListOf<Double>()
+    for (i in v) {
+        str.add(sqr(i))
+    }
+    return sqrt(str.sum())
+}
 
 /**
  * Простая
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double = TODO()
+fun mean(list: List<Double>): Double {
+    if (list.isEmpty() == true) return 0.0
+    else return (list.sum() / list.size)
+}
 
 /**
  * Средняя
@@ -132,7 +144,15 @@ fun mean(list: List<Double>): Double = TODO()
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun center(list: MutableList<Double>): MutableList<Double> = TODO()
+fun center(list: MutableList<Double>): MutableList<Double> {
+    if (list.isEmpty()) return list
+    else {
+        val s = list.sum() / list.size
+        for (i in 0 until list.size)
+            list[i] -= s
+    }
+    return list
+}
 
 /**
  * Средняя
@@ -141,7 +161,15 @@ fun center(list: MutableList<Double>): MutableList<Double> = TODO()
  * представленные в виде списков a и b. Скалярное произведение считать по формуле:
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
-fun times(a: List<Int>, b: List<Int>): Int = TODO()
+fun times(a: List<Int>, b: List<Int>): Int {
+    return if (a.isEmpty() || b.isEmpty()) 0
+    else {
+        var c = mutableListOf<Int>()
+        for (i in 0 until a.size)
+            c.add(a[i] * b[i])
+        c.sum()
+    }
+}
 
 /**
  * Средняя
@@ -151,7 +179,16 @@ fun times(a: List<Int>, b: List<Int>): Int = TODO()
  * Коэффициенты многочлена заданы списком p: (p0, p1, p2, p3, ..., pN).
  * Значение пустого многочлена равно 0 при любом x.
  */
-fun polynom(p: List<Int>, x: Int): Int = TODO()
+
+fun polynom(p: List<Int>, x: Int): Int {
+    if (p.isEmpty()) return 0
+    else {
+        var px = 0
+        for (i in 0 until p.size)
+            px += p[i] * (x.toDouble().pow(i)).toInt()
+        return px
+    }
+}
 
 /**
  * Средняя
@@ -163,7 +200,14 @@ fun polynom(p: List<Int>, x: Int): Int = TODO()
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun accumulate(list: MutableList<Int>): MutableList<Int> = TODO()
+fun accumulate(list: MutableList<Int>): MutableList<Int> {
+    return if (list.isEmpty()) list
+    else {
+        for (i in 1 until list.size)
+            list[i] += list[i - 1]
+        list
+    }
+}
 
 /**
  * Средняя
@@ -236,7 +280,33 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    var m = n
+    var j = 0
+    val str1 = listOf<String>("I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX")
+    val str2 = listOf<String>("X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC")
+    val str3 = listOf<String>("C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM")
+    val str4 = listOf<String>("M", "MM", "MMM")
+    var result = mutableListOf<String>()
+    var r: String
+
+    do {
+        m /= 10
+        j++
+    } while (m > 0)
+
+    for (i in 0 until j) {
+        m = n / (10.0.pow(i)).toInt() % 10
+        if (m == 0) continue
+        when (i) {
+            0 -> result.add(str1[m - 1])
+            1 -> result.add(str2[m - 1])
+            2 -> result.add(str3[m - 1])
+            else -> result.add(str4[m - 1])
+        }
+    }
+    return result.reversed().joinToString("", "", "", j)
+}
 
 /**
  * Очень сложная
@@ -245,4 +315,43 @@ fun roman(n: Int): String = TODO()
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    val s0 = listOf("одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать")
+    val s1 = listOf("один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
+    val s2 = listOf("десять", "двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят", "девяносто")
+    val s3 = listOf("сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот")
+    val s5 = listOf("одна тысяча", "две тысячи", "три тысячи", "четыре тысячи", "пять тысяч", "шесть тысяч", "семь тысяч", "восемь тысяч", "девять тысяч")
+    val s = mutableListOf(s0, s1, s2, s3)
+    var result = mutableListOf<String>()
+    var m = n
+    var j = 0
+
+    fun thousand(x: Int): MutableList<String> {
+        var k = 0
+        if ((x % 100 >= 11) && (x % 100 <= 19)) {
+            if (j == 1) result.add("тысяч")
+            result.add(s0[x % 10 - 1])
+            if (x / 100 != 0) result.add(s3[x / 100 - 1])
+        } else if (x % 100 == 10) {
+            if (j == 1) result.add("тысяч")
+            result.add(s2[0])
+            if (x / 100 != 0) result.add(s3[x / 100 - 1])
+        } else for (i in 1..3) {
+            k = x / (10.0.pow(i - 1)).toInt() % 10
+            if ((i == 1) && (k == 0) && (j == 1)) result.add("тысяч")
+            if (k > 0 ) result.add(s[i][k - 1])
+        }
+        return result
+    }
+
+    do {
+        result = thousand(m % 1000)
+        m /= 1000
+        if (m > 0) {
+            s[1] = s5
+            j++
+        }
+    } while (m > 0)
+
+    return result.reversed().joinToString(" ", "", "")
+}
